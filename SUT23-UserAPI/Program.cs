@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SUT23_UserAPI.Models;
 using SUT23_UserAPI.Services;
 
 namespace SUT23_UserAPI
@@ -12,8 +15,14 @@ namespace SUT23_UserAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddSingleton<IUserRepsoitory, UserRepo>();
-            
+            //builder.Services.AddSingleton<IUserRepsoitory, UserRepo>();
+            builder.Services.AddScoped<IUserRepsoitory,SqlUserRepo>();
+
+
+            //Connection to DB med EF
+            builder.Services.AddDbContext<UserDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
